@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fffdfd" />
+  <title>ถึงเธอคนเดิม ♡</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap');
+
+    :root {
+      --pink: #f16b85;
+      --text: #34343a;
+      --muted: #99949a;
+      --bg: #fffdfd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+      border-bottom: 1px solid #f2edef;
+      font-size: 13px;
+      color: #777;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 1px;
+    }
+
+    .heart {
+      color: var(--pink);
+      font-size: 22px;
+    }
+
+    .top-note {
+      font-weight: 300;
+    }
+
+    main {
+      min-height: calc(100svh - 65px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 50px 24px 100px;
+    }
+
+    .slides {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .slide {
+      display: none;
+      animation: appear 0.65s ease both;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--pink);
+      margin-bottom: 26px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.65;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    .message {
+      font-size: clamp(14px, 2vw, 17px);
+      font-weight: 300;
+      line-height: 2.3;
+      color: #89858b;
+      white-space: pre-line;
+    }
+
+    .divider {
+      margin: 36px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--pink);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      width: 42px;
+      height: 1px;
+      background: #eadde0;
+    }
+
+    .nav-arrow {
+      position: absolute;
+      top: 48%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border: 1px solid #f0e7e9;
+      border-radius: 50%;
+      background: #f8f3f4;
+      color: #555;
+      font-size: 22px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .nav-arrow:hover {
+      background: var(--pink);
+      color: white;
+      border-color: var(--pink);
+    }
+
+    #prev { left: 4%; }
+    #next { right: 4%; }
+
+    .bottom {
+      position: absolute;
+      bottom: 30px;
+      left: 4%;
+      right: 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .signature {
+      font-style: italic;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border: 0;
+      border-radius: 50%;
+      background: #e7dfe1;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .dot.active {
+      background: var(--pink);
+      transform: scale(1.15);
+    }
+
+    .counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .final-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .choice {
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: 1px solid #f1dce1;
+      background: white;
+      color: #666;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .choice.primary {
+      background: var(--pink);
+      color: white;
+      border-color: var(--pink);
+    }
+
+    .choice:hover {
+      transform: translateY(-2px);
+    }
+
+    .reply {
+      display: none;
+      color: var(--pink);
+      margin-top: 24px;
+      font-size: 15px;
+      line-height: 2;
+      animation: appear 0.5s ease;
+    }
+
+    .reply.show {
+      display: block;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        height: 58px;
+        padding: 0 20px;
+      }
+
+      .top-note {
+        font-size: 11px;
+      }
+
+      main {
+        min-height: calc(100svh - 58px);
+        padding: 40px 25px 105px;
+      }
+
+      h1 {
+        line-height: 1.6;
+        margin-bottom: 22px;
+      }
+
+      .message {
+        line-height: 2.1;
+      }
+
+      .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        top: auto;
+        bottom: 78px;
+        transform: none;
+      }
+
+      #prev { left: 22px; }
+      #next { right: 22px; }
+
+      .bottom {
+        bottom: 25px;
+        left: 25px;
+        right: 25px;
+      }
+
+      .signature {
+        display: none;
+      }
+
+      .pagination {
+        margin: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="heart">♡</span>
+      <span>For You</span>
+      <span style="color:#ddd; margin:0 8px;">|</span>
+      <span>ขอโทษนะ...</span>
+    </div>
+    <div class="top-note">ยังเป็นเธอคนเดิม... ในใจเสมอ ♡</div>
+  </header>
+
+  <main>
+    <button class="nav-arrow" id="prev"
+      aria-label="สไลด์ก่อนหน้า">←</button>
+
+    <div class="slides" id="slides">
+
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <p class="eyebrow">A LITTLE MESSAGE FOR YOU</p>
+        <h1>
+          มีบางอย่าง<br />
+          ที่เราอยากบอก<span>เธอ</span>
+        </h1>
+        <p class="message">เราไม่รู้ว่าเธอจะรู้สึกยังไงเมื่อได้อ่านข้อความนี้
+        แต่อย่างน้อยเราอยากพูดสิ่งที่อยู่ในใจ
+        โดยไม่คาดหวังว่าเธอจะต้องตอบอะไรกลับมา</p>
+        <div class="divider">♡</div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <p class="eyebrow">I'M SORRY</p>
+        <h1>
+          ขอโทษนะ<br />
+          สำหรับทุก<span>อย่าง</span>
+        </h1>
+        <p class="message">ขอโทษสำหรับสิ่งที่เราทำให้เธอเสียใจ
+        ขอโทษที่บางครั้งเราไม่เข้าใจความรู้สึกของเธอ
+        และขอโทษที่เราอาจดูแลความสัมพันธ์นี้ได้ไม่ดีพอ
+
+        เราไม่ได้อยากหาข้อแก้ตัว
+        แค่อยากยอมรับในสิ่งที่เราทำพลาดไป</p>
+        <div class="divider">♡</div>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <p class="eyebrow">YOU STILL MATTER</p>
+        <h1>
+          เธอยังเป็นคนที่<br />
+          <span>สำคัญ</span>กับเราเสมอ
+        </h1>
+        <p class="message">ขอบคุณสำหรับช่วงเวลาที่เราเคยมีกัน
+        ขอบคุณรอยยิ้ม เรื่องเล็ก ๆ และความทรงจำต่าง ๆ
+        ที่ครั้งหนึ่งทำให้เรามีความสุขมาก
+
+        ถึงวันนี้อะไรหลายอย่างจะเปลี่ยนไป
+        แต่เราไม่เคยมองว่าช่วงเวลานั้นไม่มีความหมายเลย</p>
+        <div class="divider">♡</div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <p class="eyebrow">IF I COULD TRY AGAIN</p>
+        <h1>
+          ถ้ามีโอกาสอีกครั้ง<br />
+          เราอยากทำให้<span>ดีกว่าเดิม</span>
+        </h1>
+        <p class="message">เราอยากเป็นคนที่รับฟังเธอให้มากขึ้น
+        เข้าใจเธอให้มากกว่าเดิม
+        และแสดงให้เห็นด้วยการกระทำ ไม่ใช่แค่คำพูด
+
+        เราไม่สามารถย้อนเวลากลับไปแก้ไขอดีตได้
+        แต่เราสามารถเรียนรู้จากมันได้</p>
+        <div class="divider">♡</div>
+      </section>
+
+      <!-- Slide 5 -->
+      <section class="slide">
+        <p class="eyebrow">ONE LAST THING</p>
+        <h1>
+          เราขอโอกาสได้ไหม<br />
+          <span>ถ้าเธอยังพอมีใจ</span>
+        </h1>
+        <p class="message">เรายังอยากมีเธออยู่ในชีวิต
+        แต่เราก็เข้าใจว่าความรู้สึกของเธออาจไม่เหมือนเดิม
+
+        เราจะไม่บังคับให้เธอกลับมา
+        ไม่ว่าเธอจะเลือกทางไหน เราก็เคารพการตัดสินใจของเธอ
+
+        แค่อยากให้เธอรู้ว่า...
+        เรายังรู้สึกดีกับเธอจริง ๆ ♡</p>
+
+        <div class="final-buttons">
+          <button class="choice primary" onclick="showReply('talk')">
+            เรายังคุยกันได้นะ ♡
+          </button>
+          <button class="choice" onclick="showReply('time')">
+            ขอเวลาคิดก่อนนะ
+          </button>
+        </div>
+
+        <div class="reply" id="reply" aria-live="polite"></div>
+        <div class="divider">♡</div>
+      </section>
+    </div>
+
+    <button class="nav-arrow" id="next"
+      aria-label="สไลด์ถัดไป">→</button>
+
+    <footer class="bottom">
+      <div class="signature">จากคนที่ยังหวังดีกับเธอ ♡</div>
+
+      <div class="pagination" id="pagination"
+        aria-label="เลือกสไลด์"></div>
+
+      <div class="counter" id="counter">01 / 05</div>
+    </footer>
+  </main>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const pagination = document.getElementById('pagination');
+    const counter = document.getElementById('counter');
+
+    let current = 0;
+    let touchStartX = 0;
+
+    // สร้างจุดบอกตำแหน่งของแต่ละสไลด์
+    slides.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'dot' + (index === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `ไปยังสไลด์ที่ ${index + 1}`);
+      dot.addEventListener('click', () => goTo(index));
+      pagination.appendChild(dot);
+    });
+
+    const dots = [...document.querySelectorAll('.dot')];
+
+    function goTo(index) {
+      current = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === current);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
+
+      counter.textContent =
+        `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+
+      // เริ่มแอนิเมชันใหม่เมื่อเปลี่ยนสไลด์
+      const activeSlide = slides[current];
+      activeSlide.style.animation = 'none';
+      void activeSlide.offsetWidth;
+      activeSlide.style.animation = '';
+    }
+
+    document.getElementById('prev').addEventListener('click', () => {
+      goTo(current - 1);
+    });
+
+    document.getElementById('next').addEventListener('click', () => {
+      goTo(current + 1);
+    });
+
+    // รองรับปุ่มลูกศรบนคีย์บอร์ด
+    document.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight') goTo(current + 1);
+      if (event.key === 'ArrowLeft') goTo(current - 1);
+    });
+
+    // รองรับการปัดซ้าย-ขวาบนมือถือ
+    const main = document.querySelector('main');
+
+    main.addEventListener('touchstart', event => {
+      touchStartX = event.changedTouches[0].screenX;
+    }, { passive: true });
+
+    main.addEventListener('touchend', event => {
+      const diff = event.changedTouches[0].screenX - touchStartX;
+
+      if (Math.abs(diff) > 60) {
+        goTo(current + (diff < 0 ? 1 : -1));
+      }
+    }, { passive: true });
+
+    // ข้อความตอบกลับในสไลด์สุดท้าย
+    function showReply(type) {
+      const reply = document.getElementById('reply');
+
+      if (type === 'talk') {
+        reply.textContent =
+          'ขอบคุณที่ยังเปิดโอกาสให้เราได้คุยกันนะ ♡ เราจะรับฟังเธอให้ดี';
+      } else {
+        reply.textContent =
+          'ได้เลย เราเข้าใจนะ ใช้เวลาของเธอได้เต็มที่ เราจะเคารพความรู้สึกของเธอ ♡';
+      }
+
+      reply.classList.remove('show');
+      void reply.offsetWidth;
+      reply.classList.add('show');
+    }
+  </script>
+</body>
+</html>
